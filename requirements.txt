@@ -1,0 +1,25 @@
+# Motor de vectorización ColPali
+
+# ColPali y dependencias del modelo
+colpali-engine>=0.3.7
+transformers==4.47.0
+peft==0.14.0
+torch>=2.0.0
+
+# Qdrant
+qdrant-client>=1.9.0
+
+# Conversión PDF
+pdf2image>=1.17.0
+PyMuPDF>=1.24.0    
+Pillow>=10.0.0
+
+# API
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
+google-generativeai
+
+# Utilidades
+stamina>=24.0.0
+numpy>=1.26.0
