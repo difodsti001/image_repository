@@ -61,6 +61,7 @@ POPPLER_PATH           = os.getenv("POPPLER_PATH",           r"C:\poppler-25.12.
 # Configuracion educativa
 EDU_COLLECTION   = os.getenv("EDU_COLLECTION",    "imagenes_embeddings")
 EDU_SEARCH_LIMIT = int(os.getenv("EDU_SEARCH_LIMIT", "5"))
+DEVICE = os.getenv("DEVICE", "cpu")  # auto | cpu | cuda
 
 # ---------------------------------------------------------------------------
 # Metadata: campos que se guardan en Qdrant por pagina
@@ -120,40 +121,67 @@ def _detect_device() -> str:
     import sys
 
     logger.info("Python ejecutándose en: %s", sys.executable)
+    logger.info("DEVICE config: %s", DEVICE)
+
+    # 🔥 FORZADO POR CONFIG
+    if DEVICE == "cpu":
+        logger.info("Forzando CPU por config")
+        return "cpu"
+
+    if DEVICE == "cuda":
+        if torch.cuda.is_available():
+            logger.info("Forzando GPU por config")
+            return "cuda"
+        logger.warning("CUDA solicitado pero no disponible → CPU")
+        return "cpu"
+
+    # AUTO
+    logger.info("Modo AUTO")
     logger.info("torch version: %s", torch.__version__)
     logger.info("torch.cuda.is_available(): %s", torch.cuda.is_available())
     logger.info("torch.cuda.device_count(): %s", torch.cuda.device_count())
-
-    env = os.getenv("DEVICE_MAP", "").strip()
-    logger.info("DEVICE_MAP env: %s", env)
-
-    if env:
-        return env
 
     if torch.cuda.is_available():
         logger.info("GPU detectada: %s", torch.cuda.get_device_name(0))
         return "cuda"
 
-    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-        logger.info("Apple Silicon -> mps")
-        return "mps"
-
     logger.info("Sin GPU -> cpu")
     return "cpu"
 
+os.makedirs("./offload", exist_ok=True)
+OFFLOAD_DIR = os.getenv("OFFLOAD_DIR", "./offload")
 
 def get_model() -> tuple[ColPali, ColPaliProcessor]:
     global _colpali_model, _colpali_processor
+
     if _colpali_model and _colpali_processor:
         return _colpali_model, _colpali_processor
+
     device = _detect_device()
     logger.info("Cargando ColPali '%s' (device=%s)...", COLPALI_MODEL_NAME, device)
-    _colpali_model = ColPali.from_pretrained(
-        COLPALI_MODEL_NAME, torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-        device_map="auto" if torch.cuda.is_available() else "cpu", trust_remote_code=True,
-    )
+
+    if device == "cpu":
+        _colpali_model = ColPali.from_pretrained(
+            COLPALI_MODEL_NAME,
+            torch_dtype=torch.float32,
+            device_map="cpu",
+            trust_remote_code=True,
+        )
+
+    else:
+        _colpali_model = ColPali.from_pretrained(
+            COLPALI_MODEL_NAME,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            max_memory={0: "2GiB", "cpu": "14GiB"},
+            offload_folder=OFFLOAD_DIR,
+            offload_state_dict=True,
+            trust_remote_code=True,
+        )
+
     logger.info("Cargando processor '%s'...", COLPALI_PROCESSOR_NAME)
     _colpali_processor = ColPaliProcessor.from_pretrained(COLPALI_PROCESSOR_NAME)
+
     logger.info("Modelo listo.")
     return _colpali_model, _colpali_processor
 
