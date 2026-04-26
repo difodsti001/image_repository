@@ -1,73 +1,60 @@
 """
-app_edu.py — API REST del Buscador de Recursos Educativos MINEDU
+app_edu.py — API REST Buscador de Recursos Educativos MINEDU v3
+
+Tres archivos totales: core.py | app_edu.py | index_edu.html
 
 Endpoints:
   GET  /health
-  GET  /api/edu/resources                -> lista todos los recursos registrados
-  GET  /api/edu/resources/filters        -> valores disponibles para filtros
-  POST /api/edu/repository/scan          -> escanear carpeta local de PDFs
-  POST /api/edu/repository/index         -> vectorizar PDFs pendientes
-  POST /api/edu/repository/upload        -> subir y vectorizar un PDF manualmente
-  POST /api/edu/repository/excel         -> aplicar metadata desde Excel
-  POST /api/edu/search/text              -> buscar por texto (+ filtros opcionales)
-  POST /api/edu/search/image             -> buscar por imagen (+ filtros opcionales)
-  POST /api/edu/search/similar           -> buscar paginas similares a una pagina dada
+  GET  /api/edu/resources/filters          -> filtros desde Qdrant (sin .json)
+  POST /api/edu/repository/upload          -> subir PDF manual + metadata
+  POST /api/edu/repository/excel/stream    -> Excel MINEDU con progreso SSE
+  POST /api/edu/repository/cancel          -> cancelar procesamiento Excel
+  POST /api/edu/search/text                -> buscar por texto + filtros
+  POST /api/edu/search/image               -> buscar por imagen + filtros
+  POST /api/edu/search/similar             -> buscar paginas similares
 """
 
+import asyncio
+import json
 import logging
-import tempfile
 import os
+import tempfile
 from contextlib import asynccontextmanager
+from functools import partial
 from typing import Annotated, Optional
 from io import BytesIO
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from PIL import Image
 
 import core
-import core_edu
 
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
-# Lifespan
-# ---------------------------------------------------------------------------
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Iniciando Buscador de Recursos Educativos...")
+    logger.info("Iniciando Buscador de Recursos Educativos MINEDU...")
     try:
         core.get_model()
         core.get_qdrant()
-        summary = core_edu.scan_repository()
-        logger.info("Repositorio: %d recursos (%d indexados, %d pendientes)",
-                    summary["total"], summary["indexed"], summary["pending"])
         logger.info("Servicio listo.")
     except Exception as exc:
         logger.error("Error al inicializar: %s", exc)
     yield
-    logger.info("Servicio detenido.")
 
-
-# ---------------------------------------------------------------------------
-# App
-# ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="Buscador de Recursos Educativos MINEDU",
-    description="Busca fasciculos, guias y materiales educativos por texto o imagen.",
-    version="1.1.0",
+    title="Buscador Recursos Educativos MINEDU",
+    version="3.0.0",
     lifespan=lifespan,
 )
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"], allow_methods=["*"], allow_headers=["*"],
 )
 
 
@@ -75,66 +62,36 @@ app.add_middleware(
 # Schemas
 # ---------------------------------------------------------------------------
 
-class ResourceItem(BaseModel):
-    filename:   str
-    pages:      int
-    indexed:    bool
-    indexed_at: Optional[str] = None
-    area:       Optional[str] = None
-    nivel:      Optional[str] = None
-    grado:      Optional[str] = None
-    tipo:       Optional[str] = None
-
-
 class FilterOptions(BaseModel):
-    areas:   list[str]
-    niveles: list[str]
-    tipos:   list[str]
-    grados:  list[str]
-
-
-class ScanResponse(BaseModel):
-    total:     int
-    indexed:   int
-    pending:   int
-    new_found: int
-    removed:   int = 0
-
-
-class IndexResponse(BaseModel):
-    processed:   int
-    pages_total: int
-    errors:      list[dict]
-
-
-class UploadResponse(BaseModel):
-    filename:        str
-    pages_indexed:   int
-    elapsed_seconds: float
-    area:  Optional[str] = None
-    nivel: Optional[str] = None
-    grado: Optional[str] = None
-    tipo:  Optional[str] = None
-
-
-class ExcelResponse(BaseModel):
-    updated:             int
-    not_found_in_index:  list[str]
-    total_excel_entries: int
+    tipos_recurso: list[str]
+    niveles:       list[str]
+    areas:         list[str]
+    categorias:    list[str]
 
 
 class SearchHit(BaseModel):
-    id:           int | str
-    score:        float
-    image_base64: Optional[str] = None
-    image_name:   Optional[str] = None
-    source_file:  Optional[str] = None
-    page_number:  Optional[int] = None
-    total_pages:  Optional[int] = None
-    area:         Optional[str] = None
-    nivel:        Optional[str] = None
-    grado:        Optional[str] = None
-    tipo:         Optional[str] = None
+    id:                 int | str
+    score:              float
+    image_base64:       Optional[str] = None
+    image_name:         Optional[str] = None
+    source_file:        Optional[str] = None
+    page_number:        Optional[int] = None
+    total_pages:        Optional[int] = None
+    # Metadata educativa (solo los campos permitidos)
+    categoria:          Optional[str] = None
+    sub_categoria:      Optional[str] = None
+    tipo_recurso:       Optional[str] = None
+    titulo:             Optional[str] = None
+    modalidad:          Optional[str] = None
+    servicio_educativo: Optional[str] = None
+    autor:              Optional[str] = None
+    derecho_autoridad:  Optional[str] = None
+    anio_edicion:       Optional[str] = None
+    lengua_idioma:      Optional[str] = None
+    nivel:              Optional[str] = None
+    area:               Optional[str] = None
+    resumen:            Optional[str] = None
+    competencias:       Optional[str] = None
 
 
 class SearchResponse(BaseModel):
@@ -145,185 +102,234 @@ class SearchResponse(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def _make_response(query_type, limit, hits, filters):
+    return SearchResponse(
+        query_type=query_type, limit=limit,
+        results=[SearchHit(**h) for h in hits],
+        filters_applied={k: v for k, v in filters.items() if v},
+    )
+
+
+# ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
 
 @app.get("/health", tags=["Estado"])
 def health():
-    return {"status": "ok", "model": core.COLPALI_MODEL_NAME, "collection": core_edu.EDU_COLLECTION}
-
-
-# ── Recursos ─────────────────────────────────────────────────────────────────
-
-@app.get("/api/edu/resources", response_model=list[ResourceItem], tags=["Repositorio"])
-def list_resources():
-    """Lista todos los recursos registrados con su estado de indexacion."""
-    return core_edu.get_resource_list()
+    return {
+        "status":     "ok",
+        "model":      core.COLPALI_MODEL_NAME,
+        "collection": core.EDU_COLLECTION,
+    }
 
 
 @app.get("/api/edu/resources/filters", response_model=FilterOptions, tags=["Repositorio"])
 def get_filters():
-    """Valores disponibles para filtrar (area, nivel, tipo, grado)."""
-    return core_edu.get_filter_options()
-
-
-# ── Repositorio ───────────────────────────────────────────────────────────────
-
-@app.post("/api/edu/repository/scan", response_model=ScanResponse, tags=["Repositorio"])
-def scan_repository():
-    """
-    Escanea la carpeta local y actualiza el indice:
-    - Registra nuevos PDFs encontrados.
-    - Elimina del indice los PDFs pendientes que ya no existen en disco.
-    """
+    """Retorna valores unicos de filtros directamente desde Qdrant (sin archivo .json)."""
     try:
-        return core_edu.scan_repository()
+        return core.get_filter_options_from_qdrant(core.EDU_COLLECTION)
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
+        raise HTTPException(500, str(exc))
 
 
-@app.post("/api/edu/repository/index", response_model=IndexResponse, tags=["Repositorio"])
-def index_repository(max_files: int = 0):
-    """
-    Vectoriza PDFs pendientes. max_files=0 procesa todos.
-    """
-    try:
-        return core_edu.index_pending(max_files=max_files)
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
+# ── Indexacion ────────────────────────────────────────────────────────────────
 
-
-@app.post("/api/edu/repository/upload", response_model=UploadResponse, tags=["Repositorio"])
-async def upload_resource(
-    file: Annotated[UploadFile, File(description="PDF a subir e indexar")],
+@app.post("/api/edu/repository/upload", tags=["Repositorio"])
+async def upload_manual(
+    file:               Annotated[UploadFile, File()],
+    titulo:             Annotated[str, Form()] = "",
+    tipo_recurso:       Annotated[str, Form()] = "",
+    nivel:              Annotated[str, Form()] = "",
+    area:               Annotated[str, Form()] = "",
+    categoria:          Annotated[str, Form()] = "",
+    sub_categoria:      Annotated[str, Form()] = "",
+    modalidad:          Annotated[str, Form()] = "",
+    servicio_educativo: Annotated[str, Form()] = "",
+    autor:              Annotated[str, Form()] = "",
+    derecho_autoridad:  Annotated[str, Form()] = "",
+    anio_edicion:       Annotated[str, Form()] = "",
+    lengua_idioma:      Annotated[str, Form()] = "",
+    resumen:            Annotated[str, Form()] = "",
+    competencias:       Annotated[str, Form()] = "",
 ):
-    """Sube un PDF manualmente, extrae metadata del nombre y lo vectoriza."""
+    """
+    Sube e indexa un PDF con metadata ingresada manualmente.
+    Verifica duplicados por titulo antes de procesar.
+    """
     if not file.filename.lower().endswith(".pdf"):
-        raise HTTPException(status_code=400, detail="Solo se aceptan archivos PDF.")
+        raise HTTPException(400, "Solo se aceptan archivos PDF.")
     pdf_bytes = await file.read()
     if not pdf_bytes:
-        raise HTTPException(status_code=400, detail="Archivo vacio.")
+        raise HTTPException(400, "Archivo vacio.")
+
+    metadata = {
+        "titulo":             titulo,
+        "tipo_recurso":       tipo_recurso,
+        "nivel":              nivel,
+        "area":               area,
+        "categoria":          categoria,
+        "sub_categoria":      sub_categoria,
+        "modalidad":          modalidad,
+        "servicio_educativo": servicio_educativo,
+        "autor":              autor,
+        "derecho_autoridad":  derecho_autoridad,
+        "anio_edicion":       anio_edicion,
+        "lengua_idioma":      lengua_idioma,
+        "resumen":            resumen,
+        "competencias":       competencias,
+    }
+
     try:
-        result = core_edu.index_single_upload(pdf_bytes, file.filename)
-        return UploadResponse(**result)
+        # Ejecutar en threadpool para no bloquear el event loop
+        # y registrar como _active_task para que cancel_processing() lo corte
+        loop = asyncio.get_event_loop()
+        fn   = partial(core.index_manual_upload, pdf_bytes, file.filename, metadata)
+        core._active_task = loop.run_in_executor(None, fn)
+        result = await core._active_task
+        core._active_task = None
+
+        if result.get("error"):
+            status = result.get("status")
+            if status == "cancelled":
+                raise HTTPException(499, result["message"])   # 499 = client closed
+            raise HTTPException(409, result["message"])       # 409 = conflict / duplicado
+        return {"status": "ok", **result}
+    except HTTPException:
+        raise
+    except asyncio.CancelledError:
+        raise HTTPException(499, "Indexacion cancelada por el usuario")
     except Exception as exc:
-        logger.exception("Error al subir recurso")
-        raise HTTPException(status_code=500, detail=str(exc))
+        logger.exception("Error al subir PDF manual")
+        raise HTTPException(500, str(exc))
+    finally:
+        core._active_task = None
 
 
-@app.post("/api/edu/repository/excel", response_model=ExcelResponse, tags=["Repositorio"])
-async def upload_excel_metadata(
-    file: Annotated[UploadFile, File(description="Excel (.xlsx) con metadata de recursos")],
+@app.post("/api/edu/repository/excel/stream", tags=["Repositorio"])
+async def process_excel_stream(
+    file:           Annotated[UploadFile, File()],
+    max_concurrent: Annotated[int, Form(ge=1, le=8)] = 4,
 ):
     """
-    Carga metadata desde un archivo Excel y la aplica al indice.
-
-    El Excel debe tener una columna 'filename' con el nombre exacto del PDF
-    (campo comun entre el Excel y los PDFs). Columnas opcionales: area, nivel, grado, tipo.
-    Cualquier columna adicional se guarda como metadata extra del recurso.
-
-    Ejemplo:
-      filename                        | area       | nivel    | grado | tipo
-      Fasciculo_Matematica_4to.pdf    | Matematica | Primaria | 4°    | Fasciculo
+    Procesa Excel MINEDU con progreso SSE en tiempo real.
+    Filtra: LENGUA=Castellano, TIPO ENLACE=PDF, ESTADO=Activo.
+    Verifica duplicados en Qdrant antes de descargar cada PDF.
     """
     if not file.filename.lower().endswith((".xlsx", ".xls")):
-        raise HTTPException(status_code=400, detail="Solo se aceptan archivos Excel (.xlsx).")
+        raise HTTPException(400, "Solo Excel (.xlsx).")
     excel_bytes = await file.read()
     if not excel_bytes:
-        raise HTTPException(status_code=400, detail="Archivo vacio.")
+        raise HTTPException(400, "Archivo vacio.")
 
-    # Guardar temporalmente para leerlo con openpyxl
-    with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp:
-        tmp.write(excel_bytes)
-        tmp_path = tmp.name
+    tmp = tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False)
+    tmp.write(excel_bytes)
+    tmp.close()
+    tmp_path = tmp.name
 
-    try:
-        result = core_edu.apply_excel_metadata(tmp_path)
-        return ExcelResponse(**result)
-    except Exception as exc:
-        logger.exception("Error al procesar Excel")
-        raise HTTPException(status_code=500, detail=str(exc))
-    finally:
-        os.unlink(tmp_path)
+    async def event_stream():
+        # Registrar el generador como tarea activa para que cancel_processing() lo corte
+        gen = core.process_excel_minedu(tmp_path, max_concurrent)
+        try:
+            async for event in gen:
+                yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+                if event.get("type") in ("done", "cancelled"):
+                    break
+        except asyncio.CancelledError:
+            yield f"data: {json.dumps({'type':'cancelled','msg':'Procesamiento cancelado'}, ensure_ascii=False)}\n\n"
+        finally:
+            try: os.unlink(tmp_path)
+            except: pass
+            core._cancel_event.clear()
+
+    task = asyncio.ensure_future(event_stream().__anext__())
+    core._active_task = task
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
+
+@app.post("/api/edu/repository/cancel", tags=["Repositorio"])
+async def cancel_processing():
+    """
+    Cancela cualquier operacion de indexacion en curso:
+    - Excel MINEDU (descarga + vectorizacion)
+    - Subida manual (vectorizacion)
+    El abort es inmediato: corta entre paginas o entre descargas.
+    """
+    core.cancel_processing()
+    return {"status": "ok", "message": "Cancelacion solicitada — la operacion se detendrá en el próximo punto de control"}
 
 
 # ── Busqueda ──────────────────────────────────────────────────────────────────
 
 @app.post("/api/edu/search/text", response_model=SearchResponse, tags=["Busqueda"])
-async def search_by_text(
-    query: Annotated[str, Form()],
-    limit: Annotated[int, Form(ge=1, le=20)] = core_edu.EDU_SEARCH_LIMIT,
-    area:  Annotated[Optional[str], Form()] = None,
-    nivel: Annotated[Optional[str], Form()] = None,
-    tipo:  Annotated[Optional[str], Form()] = None,
-    grado: Annotated[Optional[str], Form()] = None,
+async def search_text(
+    query:        Annotated[str, Form()],
+    limit:        Annotated[int, Form(ge=1, le=20)] = core.EDU_SEARCH_LIMIT,
+    tipo_recurso: Annotated[Optional[str], Form()] = None,
+    nivel:        Annotated[Optional[str], Form()] = None,
+    area:         Annotated[Optional[str], Form()] = None,
+    categoria:    Annotated[Optional[str], Form()] = None,
 ):
-    """Busca recursos educativos por texto con filtros opcionales."""
     if not query.strip():
-        raise HTTPException(status_code=400, detail="La consulta no puede estar vacia.")
+        raise HTTPException(400, "Query vacio.")
     try:
-        hits = core_edu.search_resources_by_text(query, limit, area, nivel, tipo, grado)
-        return SearchResponse(
-            query_type="text", limit=limit,
-            results=[SearchHit(**h) for h in hits],
-            filters_applied={k: v for k, v in
-                             {"area": area, "nivel": nivel, "tipo": tipo, "grado": grado}.items() if v},
-        )
+        hits = core.search_by_text(query, limit, tipo_recurso, nivel, area, categoria)
+        return _make_response("text", limit, hits,
+                              {"tipo_recurso": tipo_recurso, "nivel": nivel,
+                               "area": area, "categoria": categoria})
     except Exception as exc:
-        logger.exception("Error en busqueda por texto")
-        raise HTTPException(status_code=500, detail=str(exc))
+        raise HTTPException(500, str(exc))
 
 
 @app.post("/api/edu/search/image", response_model=SearchResponse, tags=["Busqueda"])
-async def search_by_image(
-    file:  Annotated[UploadFile, File()],
-    limit: Annotated[int, Form(ge=1, le=20)] = core_edu.EDU_SEARCH_LIMIT,
-    area:  Annotated[Optional[str], Form()] = None,
-    nivel: Annotated[Optional[str], Form()] = None,
-    tipo:  Annotated[Optional[str], Form()] = None,
-    grado: Annotated[Optional[str], Form()] = None,
+async def search_image(
+    file:         Annotated[UploadFile, File()],
+    limit:        Annotated[int, Form(ge=1, le=20)] = core.EDU_SEARCH_LIMIT,
+    tipo_recurso: Annotated[Optional[str], Form()] = None,
+    nivel:        Annotated[Optional[str], Form()] = None,
+    area:         Annotated[Optional[str], Form()] = None,
+    categoria:    Annotated[Optional[str], Form()] = None,
 ):
-    """Busca recursos educativos usando una imagen como consulta."""
     img_bytes = await file.read()
     if not img_bytes:
-        raise HTTPException(status_code=400, detail="Archivo vacio.")
+        raise HTTPException(400, "Archivo vacio.")
     try:
         image = Image.open(BytesIO(img_bytes)).convert("RGB")
-        hits = core_edu.search_resources_by_image(image, limit, area, nivel, tipo, grado)
-        return SearchResponse(
-            query_type="image", limit=limit,
-            results=[SearchHit(**h) for h in hits],
-            filters_applied={k: v for k, v in
-                             {"area": area, "nivel": nivel, "tipo": tipo, "grado": grado}.items() if v},
-        )
+        hits  = core.search_by_image_query(image, limit, tipo_recurso, nivel, area, categoria)
+        return _make_response("image", limit, hits,
+                              {"tipo_recurso": tipo_recurso, "nivel": nivel,
+                               "area": area, "categoria": categoria})
     except Exception as exc:
-        logger.exception("Error en busqueda por imagen")
-        raise HTTPException(status_code=500, detail=str(exc))
+        raise HTTPException(500, str(exc))
 
 
 @app.post("/api/edu/search/similar", response_model=SearchResponse, tags=["Busqueda"])
 async def search_similar(
-    image_base64: Annotated[str, Form(description="Base64 PNG de la pagina de referencia")],
-    limit: Annotated[int, Form(ge=1, le=20)] = core_edu.EDU_SEARCH_LIMIT,
+    image_base64: Annotated[str, Form()],
+    limit:        Annotated[int, Form(ge=1, le=20)] = core.EDU_SEARCH_LIMIT,
 ):
     """
-    Busca paginas visualmente similares a una pagina ya encontrada.
-    Recibe el image_base64 de un resultado previo.
+    Busca paginas visualmente similares.
+    La imagen se redimensiona internamente antes de embeddear
+    para evitar el error 'Part exceeded maximum size of 1024KB'.
     """
-    if not image_base64.strip():
-        raise HTTPException(status_code=400, detail="image_base64 vacio.")
+    b64 = image_base64.strip()
+    if not b64:
+        raise HTTPException(400, "image_base64 vacio.")
     try:
-        hits = core_edu.search_similar_to_page(image_base64, limit)
-        return SearchResponse(query_type="similar", limit=limit,
-                              results=[SearchHit(**h) for h in hits])
+        hits = core.search_similar_to_page(b64, limit)
+        return _make_response("similar", limit, hits, {})
     except Exception as exc:
-        logger.exception("Error en busqueda por similitud")
-        raise HTTPException(status_code=500, detail=str(exc))
+        logger.exception("Error en search/similar")
+        raise HTTPException(500, str(exc))
 
-
-# ---------------------------------------------------------------------------
-# Entry point
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     import uvicorn

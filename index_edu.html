@@ -15,56 +15,35 @@
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
 }
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:14px;min-height:100vh}
-
-/* Header */
 header{background:var(--accent);color:#fff;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px;box-shadow:0 2px 8px rgba(29,78,216,.3);position:sticky;top:0;z-index:200}
 .logo{display:flex;align-items:center;gap:12px}
 .logo-icon{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
 .logo-text{font-weight:700;font-size:16px;line-height:1.2}
 .logo-text small{font-weight:400;font-size:12px;opacity:.8;display:block}
 .status-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);padding:6px 14px;border-radius:99px;font-size:12px}
-#status-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .3s}
+#status-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4)}
 #status-dot.ok{background:#4ade80}
 #status-dot.err{background:#f87171}
-
-/* Layout */
 .layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 64px)}
-
-/* Sidebar */
 .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:24px 20px;overflow-y:auto;position:sticky;top:64px;height:calc(100vh - 64px)}
 .sidebar-section{margin-bottom:28px}
 .sidebar-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px;border:none;background:transparent;width:100%;text-align:left}
 .nav-item:hover{background:var(--surface2);color:var(--text)}
 .nav-item.active{background:var(--accent-light);color:var(--accent);font-weight:600}
-.nav-icon{font-size:16px;width:20px;text-align:center}
-
-/* Filtros */
 .filter-group{margin-bottom:12px}
 .filter-label{font-size:12px;color:var(--muted);margin-bottom:4px;display:block}
 select.filter-sel{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:7px;font-size:13px;background:var(--surface2);color:var(--text);outline:none}
 select.filter-sel:focus{border-color:var(--accent2)}
 .btn-clear-filters{font-size:12px;color:var(--accent2);background:none;border:none;cursor:pointer;padding:4px 0;text-decoration:underline}
-
-/* Stats mini */
-.stat-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.stat-mini{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;flex:1;text-align:center;min-width:60px}
-.stat-mini span{display:block;font-size:10px;font-weight:400;color:var(--muted)}
-
-/* Main */
 .main{padding:28px 32px;overflow-y:auto}
-.panel{display:none}
-.panel.active{display:block}
-
-/* Cards */
+.panel{display:none}.panel.active{display:block}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow)}
 .card-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px}
-
-/* Search bar */
 .search-wrap{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:4px;display:flex;gap:4px;margin-bottom:20px;box-shadow:var(--shadow);transition:border-color .2s}
 .search-wrap:focus-within{border-color:var(--accent2)}
 .search-mode-btns{display:flex;gap:2px;padding:2px}
-.smode-btn{padding:6px 12px;border-radius:7px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s;white-space:nowrap}
+.smode-btn{padding:6px 12px;border-radius:7px;border:none;background:transparent;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s}
 .smode-btn.active{background:var(--accent);color:#fff}
 .search-input-area{flex:1;display:flex;align-items:center}
 #main-query{flex:1;border:none;outline:none;font-size:15px;background:transparent;color:var(--text);padding:8px 4px}
@@ -74,69 +53,73 @@ select.filter-sel:focus{border-color:var(--accent2)}
 .img-query-label strong{color:var(--accent2)}
 #img-query-input{display:none}
 #img-query-preview{height:36px;border-radius:6px;border:1px solid var(--border);display:none}
-.btn-search{padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
-.btn-search:hover{opacity:.88}
+.btn-search{padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
 .btn-search:disabled{opacity:.5;cursor:not-allowed}
-
-/* Results */
 .results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
 .results-count{font-size:13px;color:var(--muted)}
 .active-filters{display:flex;gap:6px;flex-wrap:wrap}
 .filter-tag{background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px}
-.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-
-/* Result card */
+.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);animation:fadeUp .3s ease both;transition:box-shadow .2s,transform .2s}
 .result-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12);transform:translateY(-2px)}
-.result-card:nth-child(2){animation-delay:.05s}
-.result-card:nth-child(3){animation-delay:.1s}
-.result-card:nth-child(4){animation-delay:.15s}
-.result-card:nth-child(5){animation-delay:.2s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.result-img-wrap{position:relative;background:#f1f5f9;height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.result-img-wrap{position:relative;background:#f1f5f9;height:190px;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .result-img-wrap img{width:100%;height:100%;object-fit:contain}
 .rank-badge{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px}
 .result-body{padding:12px 14px}
-.result-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.result-page{font-size:12px;color:var(--muted);margin-bottom:8px}
-.result-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.result-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.result-page{font-size:11px;color:var(--muted);margin-bottom:8px}
+.result-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
 .tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px}
-.tag.area{background:#ede9fe;color:#7c3aed}
-.tag.nivel{background:#dcfce7;color:#16a34a}
 .tag.tipo{background:#fef3c7;color:#d97706}
-.tag.grado{background:#dbeafe;color:#1d4ed8}
-.result-actions{display:flex;gap:6px}
-.btn-action{flex:1;padding:6px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);font-size:11px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s;text-align:center}
+.tag.nivel{background:#dcfce7;color:#16a34a}
+.tag.area{background:#ede9fe;color:#7c3aed}
+.tag.cat{background:#dbeafe;color:#1d4ed8}
+.result-actions{display:flex;gap:5px}
+.btn-action{flex:1;padding:5px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);font-size:11px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s;text-align:center}
 .btn-action:hover{border-color:var(--accent2);color:var(--accent2);background:var(--accent-light)}
-
-/* Modal */
+/* Modal visor */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding:24px;backdrop-filter:blur(4px);overflow-y:auto}
 .modal-overlay.open{display:flex}
-.modal{background:var(--surface);border-radius:16px;max-width:900px;width:100%;margin:auto;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:modalIn .25s ease}
+.modal{background:var(--surface);border-radius:16px;max-width:920px;width:100%;margin:auto;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:modalIn .25s ease}
 @keyframes modalIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
 .modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .modal-header-left{flex:1;min-width:0}
 .modal-header h3{font-size:15px;font-weight:700;margin-bottom:6px;word-break:break-word}
-.modal-meta{display:flex;gap:6px;flex-wrap:wrap}
+.modal-header-tags{display:flex;gap:6px;flex-wrap:wrap}
 .modal-header-right{display:flex;gap:8px;align-items:center;flex-shrink:0}
 .btn-modal-close{padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:13px;color:var(--muted)}
 .btn-modal-close:hover{background:var(--surface2)}
-/* Imagen ocupa todo el espacio necesario, sin altura fija */
 .modal-img-wrap{background:#f1f5f9;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal-img-wrap img{max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.12);display:block}
-.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.modal-footer .ref{font-size:13px;color:var(--muted);flex:1}
+.modal-img-wrap img{max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.modal-detail{padding:16px 20px;border-top:1px solid var(--border);display:none}
+.modal-detail.open{display:block}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.detail-field{background:var(--surface2);border-radius:8px;padding:10px 12px}
+.df-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.df-value{font-size:12px;color:var(--text);line-height:1.5;word-break:break-word}
+.df-value a{color:var(--accent2);text-decoration:underline}
+.detail-resumen{margin-top:12px;background:var(--surface2);border-radius:8px;padding:12px}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.modal-footer .ref{font-size:12px;color:var(--muted);flex:1}
 .btn-similar{padding:8px 16px;border-radius:8px;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent2);font-size:13px;font-weight:600;cursor:pointer}
 .btn-similar:hover{background:var(--accent);color:#fff}
-
-/* Repositorio table */
-.resource-table{width:100%;border-collapse:collapse;font-size:13px}
-.resource-table th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-.resource-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
-.resource-table tr:hover td{background:var(--surface2)}
-.badge-indexed{background:var(--green-light);color:var(--green);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px}
-.badge-pending{background:var(--yellow-light);color:var(--yellow);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px}
-
+.btn-detail-toggle{padding:8px 16px;border-radius:8px;background:var(--surface2);color:var(--text);border:1px solid var(--border);font-size:13px;font-weight:600;cursor:pointer}
+/* Modal subida manual */
+.modal-overlay.upload-overlay{z-index:1100}
+.modal-upload{background:var(--surface);border-radius:16px;max-width:640px;width:100%;margin:auto;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:modalIn .25s ease;max-height:90vh;overflow-y:auto}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-field{display:flex;flex-direction:column;gap:5px}
+.form-field label{font-size:12px;color:var(--muted);font-weight:600}
+.form-field input,.form-field select,.form-field textarea{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface2);color:var(--text);outline:none;font-family:inherit}
+.form-field input:focus,.form-field textarea:focus{border-color:var(--accent2)}
+.form-field.full{grid-column:1/-1}
+/* Progress */
+.progress-bar-wrap{margin-top:8px;display:none}
+.progress-bar{height:6px;border-radius:99px;background:var(--border);overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .3s}
+.progress-log{background:#1e293b;border-radius:10px;padding:14px;max-height:260px;overflow-y:auto;font-family:monospace;font-size:12px;color:#94a3b8;margin-top:12px;display:none;line-height:1.6}
+.log-ok{color:#4ade80}.log-err{color:#f87171}.log-info{color:#93c5fd}.log-skip{color:#fbbf24}
 /* Misc */
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s}
 .btn:disabled{opacity:.5;cursor:not-allowed}
@@ -144,24 +127,22 @@ select.filter-sel:focus{border-color:var(--accent2)}
 .btn-primary:hover:not(:disabled){opacity:.85}
 .btn-outline{background:transparent;color:var(--accent);border:1px solid var(--accent2)}
 .btn-outline:hover:not(:disabled){background:var(--accent-light)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid var(--red)}
+.btn-danger:hover:not(:disabled){background:var(--red-light)}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 .spinner.dark{border-color:var(--border);border-top-color:var(--accent)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty-state{text-align:center;padding:60px 24px;color:var(--muted)}
 .empty-state .icon{font-size:48px;margin-bottom:12px}
-.alert{padding:12px 16px;border-radius:8px;font-size:13px;margin:12px 0}
+.alert{padding:12px 16px;border-radius:8px;font-size:13px;margin:10px 0}
 .alert.success{background:var(--green-light);border:1px solid #86efac;color:var(--green)}
 .alert.error{background:var(--red-light);border:1px solid #fca5a5;color:var(--red)}
 .alert.info{background:var(--accent-light);border:1px solid #93c5fd;color:var(--accent)}
-.progress-bar{height:5px;border-radius:99px;background:var(--border);overflow:hidden;margin-top:8px}
-.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:100%;animation:shimmer 1.5s infinite}
-@keyframes shimmer{0%{filter:brightness(1)}50%{filter:brightness(1.3)}100%{filter:brightness(1)}}
-
-/* Historial */
-.history-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;cursor:pointer;color:var(--text);font-size:13px;transition:background .15s}
+.alert.warning{background:var(--yellow-light);border:1px solid #fcd34d;color:var(--yellow)}
+.history-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;cursor:pointer;transition:background .15s}
 .history-item:hover{background:var(--surface2)}
-.hist-text{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
-.hist-del{color:var(--muted);background:none;border:none;cursor:pointer;font-size:14px;opacity:0;padding:2px 4px}
+.hist-text{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:var(--text)}
+.hist-del{color:var(--muted);background:none;border:none;cursor:pointer;opacity:0;padding:2px 4px}
 .history-item:hover .hist-del{opacity:1}
 </style>
 </head>
@@ -170,10 +151,7 @@ select.filter-sel:focus{border-color:var(--accent2)}
 <header>
   <div class="logo">
     <div class="logo-icon">📚</div>
-    <div class="logo-text">
-      Recursos Educativos
-      <small>Motor de búsqueda visual · MINEDU</small>
-    </div>
+    <div class="logo-text">Recursos Educativos<small>Motor de búsqueda visual · MINEDU</small></div>
   </div>
   <div class="status-pill">
     <span id="status-dot"></span>
@@ -182,45 +160,33 @@ select.filter-sel:focus{border-color:var(--accent2)}
 </header>
 
 <div class="layout">
-
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-title">Navegación</div>
-      <button class="nav-item active" onclick="showPanel('search',this)"><span class="nav-icon">🔍</span> Buscador</button>
-      <button class="nav-item"        onclick="showPanel('repo',this)"><span class="nav-icon">📂</span> Repositorio</button>
+      <button class="nav-item active" onclick="showPanel('search',this)"><span>🔍</span> Buscador</button>
+      <button class="nav-item"        onclick="showPanel('repo',this)"><span>📂</span> Repositorio</button>
     </div>
-
     <div class="sidebar-section">
-      <div class="sidebar-title">Repositorio</div>
-      <div class="stat-row">
-        <div class="stat-mini"><span>Total</span><span id="s-total">—</span></div>
-        <div class="stat-mini"><span>Indexados</span><span id="s-indexed">—</span></div>
-        <div class="stat-mini"><span>Pendientes</span><span id="s-pending">—</span></div>
-      </div>
-    </div>
-
-    <div class="sidebar-section" id="filter-section">
-      <div class="sidebar-title">Filtros</div>
+      <div class="sidebar-title">Filtros de búsqueda</div>
       <div class="filter-group">
-        <label class="filter-label">Área curricular</label>
-        <select class="filter-sel" id="f-area" onchange="applyFilterChange()"><option value="">Todas</option></select>
+        <label class="filter-label">Tipo de recurso</label>
+        <select class="filter-sel" id="f-tipo" onchange="applyFilterChange()"><option value="">Todos</option></select>
       </div>
       <div class="filter-group">
         <label class="filter-label">Nivel</label>
         <select class="filter-sel" id="f-nivel" onchange="applyFilterChange()"><option value="">Todos</option></select>
       </div>
       <div class="filter-group">
-        <label class="filter-label">Tipo de recurso</label>
-        <select class="filter-sel" id="f-tipo" onchange="applyFilterChange()"><option value="">Todos</option></select>
+        <label class="filter-label">Área</label>
+        <select class="filter-sel" id="f-area" onchange="applyFilterChange()"><option value="">Todas</option></select>
       </div>
       <div class="filter-group">
-        <label class="filter-label">Grado</label>
-        <select class="filter-sel" id="f-grado" onchange="applyFilterChange()"><option value="">Todos</option></select>
+        <label class="filter-label">Categoría</label>
+        <select class="filter-sel" id="f-cat" onchange="applyFilterChange()"><option value="">Todas</option></select>
       </div>
       <button class="btn-clear-filters" onclick="clearFilters()">✕ Limpiar filtros</button>
     </div>
-
     <div class="sidebar-section">
       <div class="sidebar-title">Búsquedas recientes</div>
       <div id="history-list"><div style="font-size:12px;color:var(--muted)">Sin búsquedas aún</div></div>
@@ -229,8 +195,7 @@ select.filter-sel:focus{border-color:var(--accent2)}
 
   <!-- MAIN -->
   <main class="main">
-
-    <!-- PANEL: BUSCADOR -->
+    <!-- PANEL BUSCADOR -->
     <div id="panel-search" class="panel active">
       <div class="search-wrap">
         <div class="search-mode-btns">
@@ -253,62 +218,68 @@ select.filter-sel:focus{border-color:var(--accent2)}
         <div class="empty-state">
           <div class="icon">🔎</div>
           <div style="font-size:15px;font-weight:600;margin-bottom:8px">Busca en el repositorio educativo</div>
-          <div style="font-size:13px">Escribe una pregunta o tema, o sube una imagen de referencia</div>
+          <div style="font-size:13px;color:var(--muted)">Escribe una pregunta o sube una imagen de referencia</div>
         </div>
       </div>
     </div>
 
-    <!-- PANEL: REPOSITORIO -->
+    <!-- PANEL REPOSITORIO -->
     <div id="panel-repo" class="panel">
       <div class="card">
         <div class="card-title">📂 Gestión del Repositorio</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
-          <button class="btn btn-outline" onclick="scanRepo()">🔄 Escanear carpeta</button>
-          <button class="btn btn-primary" id="btn-index" onclick="indexRepo()">⚡ Indexar pendientes</button>
-          <label class="btn btn-outline" style="cursor:pointer">
-            📤 Subir PDF
-            <input type="file" accept=".pdf" style="display:none" onchange="uploadPDF(this)"/>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+          <button class="btn btn-outline" onclick="openUploadModal()">📤 Subir PDF manual</button>
+          <label class="btn btn-primary" style="cursor:pointer">
+            📊 Cargar Excel MINEDU
+            <input type="file" accept=".xlsx,.xls" style="display:none" id="excel-input" onchange="uploadExcel(this)"/>
           </label>
-          <label class="btn btn-outline" style="cursor:pointer">
-            📊 Cargar Excel
-            <input type="file" accept=".xlsx,.xls" style="display:none" onchange="uploadExcel(this)"/>
-          </label>
+          <button class="btn btn-danger" id="btn-cancel" onclick="cancelProcessing()" style="display:none">⏹ Cancelar</button>
         </div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
-          <strong>Excel de metadata:</strong> debe tener columna <code>filename</code> (nombre del PDF) + columnas opcionales: <code>area</code>, <code>nivel</code>, <code>grado</code>, <code>tipo</code>.
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px">
+          <strong>Excel MINEDU:</strong> Filtra LENGUA=Castellano + TIPO ENLACE=PDF + ESTADO=Activo.
+          Descarga y vectoriza en paralelo. Verifica duplicados por título antes de procesar.
         </div>
         <div id="repo-alert" style="display:none"></div>
-        <div id="repo-progress" style="display:none">
-          <div style="font-size:13px;color:var(--muted);margin-bottom:4px" id="repo-progress-label">Indexando…</div>
-          <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="progress-bar-wrap" id="progress-wrap">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;color:var(--muted)" id="progress-label">Procesando…</span>
+            <span style="font-size:12px;font-weight:600" id="progress-pct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-title">📋 Recursos registrados</div>
-        <div id="resource-table-wrap">
-          <div class="empty-state"><div class="icon">📭</div><div>Sin recursos registrados.<br>Escanea la carpeta.</div></div>
-        </div>
+        <div class="progress-log" id="progress-log"></div>
       </div>
     </div>
-
   </main>
 </div>
 
-<!-- MODAL VISOR -->
+<!-- MODAL VISOR DE PÁGINA -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-header-left">
         <h3 id="modal-title">Página del recurso</h3>
-        <div class="modal-meta" id="modal-tags"></div>
+        <div class="modal-header-tags" id="modal-tags"></div>
       </div>
       <div class="modal-header-right">
+        <button class="btn-detail-toggle" onclick="toggleDetail()">📋 Ver detalle</button>
         <button class="btn-similar" onclick="searchSimilarFromModal()">🔍 Similares</button>
-        <button class="btn-modal-close" onclick="closeModal()">✕ Cerrar</button>
+        <button class="btn-modal-close" onclick="closeModal()">✕</button>
       </div>
     </div>
     <div class="modal-img-wrap">
       <img id="modal-img" src="" alt="Página completa"/>
+    </div>
+    <div class="modal-detail" id="modal-detail">
+      <div class="detail-grid" id="detail-grid"></div>
+      <div class="detail-resumen" id="detail-resumen" style="display:none">
+        <div class="df-label">Resumen</div>
+        <div class="df-value" id="detail-resumen-text" style="font-size:13px;line-height:1.6;margin-top:4px"></div>
+      </div>
+      <div id="detail-competencias-wrap" style="display:none;margin-top:12px;background:var(--surface2);border-radius:8px;padding:12px">
+        <div class="df-label">Competencias</div>
+        <div class="df-value" id="detail-competencias-text" style="font-size:13px;line-height:1.6;margin-top:4px"></div>
+      </div>
     </div>
     <div class="modal-footer">
       <div class="ref" id="modal-ref"></div>
@@ -316,17 +287,91 @@ select.filter-sel:focus{border-color:var(--accent2)}
   </div>
 </div>
 
+<!-- MODAL SUBIDA MANUAL -->
+<div class="modal-overlay upload-overlay" id="modal-upload" onclick="closeUploadOutside(event)">
+  <div class="modal-upload">
+    <h3 style="margin-bottom:20px;font-size:16px;font-weight:700">📤 Subir PDF Manual</h3>
+    <div class="form-grid">
+      <div class="form-field full">
+        <label>Archivo PDF *</label>
+        <input type="file" id="manual-file" accept=".pdf"/>
+      </div>
+      <div class="form-field full">
+        <label>Título *</label>
+        <input type="text" id="m-titulo" placeholder="Título completo del recurso"/>
+      </div>
+      <div class="form-field">
+        <label>Tipo de recurso</label>
+        <input type="text" id="m-tipo" placeholder="Ej: Fascículo, Guía, Cuaderno…"/>
+      </div>
+      <div class="form-field">
+        <label>Categoría</label>
+        <input type="text" id="m-cat" placeholder="Ej: Material Educativo"/>
+      </div>
+      <div class="form-field">
+        <label>Sub-categoría</label>
+        <input type="text" id="m-subcat" placeholder="Ej: Material Complementario"/>
+      </div>
+      <div class="form-field">
+        <label>Nivel</label>
+        <input type="text" id="m-nivel" placeholder="Ej: Primaria, Secundaria"/>
+      </div>
+      <div class="form-field">
+        <label>Área</label>
+        <input type="text" id="m-area" placeholder="Ej: Matemática, Comunicación"/>
+      </div>
+      <div class="form-field">
+        <label>Modalidad</label>
+        <input type="text" id="m-modalidad" placeholder="Ej: Educación Básica Regular"/>
+      </div>
+      <div class="form-field">
+        <label>Servicio educativo</label>
+        <input type="text" id="m-servicio" placeholder="Ej: Intercultural Bilingüe"/>
+      </div>
+      <div class="form-field">
+        <label>Autor</label>
+        <input type="text" id="m-autor" placeholder="Autor o institución"/>
+      </div>
+      <div class="form-field">
+        <label>Derecho / Autoridad</label>
+        <input type="text" id="m-derecho" placeholder="Ej: Ministerio de Educación"/>
+      </div>
+      <div class="form-field">
+        <label>Año de edición</label>
+        <input type="text" id="m-anio" placeholder="Ej: 2024"/>
+      </div>
+      <div class="form-field">
+        <label>Lengua / Idioma</label>
+        <input type="text" id="m-lengua" placeholder="Ej: Castellano"/>
+      </div>
+      <div class="form-field full">
+        <label>Resumen</label>
+        <textarea id="m-resumen" rows="3" placeholder="Descripción breve del contenido…"></textarea>
+      </div>
+      <div class="form-field full">
+        <label>Competencias</label>
+        <textarea id="m-competencias" rows="2" placeholder="Competencias que desarrolla…"></textarea>
+      </div>
+    </div>
+    <div id="upload-alert" style="display:none;margin-top:12px"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeUploadModal()">Cancelar</button>
+      <button class="btn btn-primary" id="btn-upload-manual" onclick="submitManual()">⚡ Indexar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const API = 'http://localhost:8001';
-let searchMode = 'text';
-let lastQuery  = '';
-let modalHit   = null;
-const HISTORY_KEY = 'edu_search_history';
+let searchMode  = 'text';
+let lastQuery   = '';
+let modalHit    = null;
+let processing  = false;
+const HISTORY_KEY = 'edu_history_v3';
 
 window.addEventListener('DOMContentLoaded', () => {
   checkHealth();
   loadFilters();
-  loadRepoStats();
   renderHistory();
 });
 
@@ -347,43 +392,42 @@ function showPanel(name, btn) {
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById(`panel-${name}`).classList.add('active');
   if (btn) btn.classList.add('active');
-  if (name==='repo') loadResourceTable();
 }
-function showPanelSearch() {
+function goToSearch() {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-search').classList.add('active');
   document.querySelector('.nav-item').classList.add('active');
 }
 
-// ── Filtros ───────────────────────────────────────────────────────────────────
+// ── Filtros (desde Qdrant) ────────────────────────────────────────────────────
 async function loadFilters() {
   try {
     const r = await fetch(`${API}/api/edu/resources/filters`);
+    if (!r.ok) return;
     const d = await r.json();
-    populate('f-area',  d.areas,   'Todas');
-    populate('f-nivel', d.niveles, 'Todos');
-    populate('f-tipo',  d.tipos,   'Todos');
-    populate('f-grado', d.grados,  'Todos');
+    populate('f-tipo',  d.tipos_recurso, 'Todos');
+    populate('f-nivel', d.niveles,       'Todos');
+    populate('f-area',  d.areas,         'Todas');
+    populate('f-cat',   d.categorias,    'Todas');
   } catch {}
 }
-function populate(selId, items, ph) {
-  const sel = document.getElementById(selId);
-  const cur = sel.value;
+function populate(id, items, ph) {
+  const sel = document.getElementById(id), cur = sel.value;
   sel.innerHTML = `<option value="">${ph}</option>` +
-    items.map(v=>`<option value="${v}"${v===cur?' selected':''}>${v}</option>`).join('');
+    (items||[]).map(v=>`<option value="${v}"${v===cur?' selected':''}>${v}</option>`).join('');
 }
 function applyFilterChange() { if (lastQuery) runSearch(); }
 function clearFilters() {
-  ['f-area','f-nivel','f-tipo','f-grado'].forEach(id=>document.getElementById(id).value='');
+  ['f-tipo','f-nivel','f-area','f-cat'].forEach(id=>document.getElementById(id).value='');
   if (lastQuery) runSearch();
 }
 function getFilters() {
   return {
-    area:  document.getElementById('f-area').value  || null,
-    nivel: document.getElementById('f-nivel').value || null,
-    tipo:  document.getElementById('f-tipo').value  || null,
-    grado: document.getElementById('f-grado').value || null,
+    tipo_recurso: document.getElementById('f-tipo').value  || null,
+    nivel:        document.getElementById('f-nivel').value || null,
+    area:         document.getElementById('f-area').value  || null,
+    categoria:    document.getElementById('f-cat').value   || null,
   };
 }
 
@@ -392,12 +436,12 @@ function setSearchMode(mode) {
   searchMode = mode;
   document.getElementById('smode-text').classList.toggle('active',  mode==='text');
   document.getElementById('smode-image').classList.toggle('active', mode==='image');
-  document.getElementById('main-query').style.display      = mode==='text'  ? '' : 'none';
-  document.getElementById('img-query-wrap').style.display  = mode==='image' ? 'flex' : 'none';
+  document.getElementById('main-query').style.display     = mode==='text'  ? '' : 'none';
+  document.getElementById('img-query-wrap').style.display = mode==='image' ? 'flex' : 'none';
 }
 function handleImgQuery(input) {
-  const prev = document.getElementById('img-query-preview');
-  if (input.files[0]) { prev.src=URL.createObjectURL(input.files[0]); prev.style.display='block'; }
+  const p = document.getElementById('img-query-preview');
+  if (input.files[0]) { p.src=URL.createObjectURL(input.files[0]); p.style.display='block'; }
 }
 
 // ── Busqueda principal ────────────────────────────────────────────────────────
@@ -405,17 +449,14 @@ async function runSearch() {
   const filters = getFilters();
   let endpoint, form = new FormData();
 
-  if (searchMode==='text') {
+  if (searchMode === 'text') {
     const q = document.getElementById('main-query').value.trim();
     if (!q) return;
     lastQuery = q;
     addToHistory(q);
     form.append('query', q);
     form.append('limit', 5);
-    if (filters.area)  form.append('area',  filters.area);
-    if (filters.nivel) form.append('nivel', filters.nivel);
-    if (filters.tipo)  form.append('tipo',  filters.tipo);
-    if (filters.grado) form.append('grado', filters.grado);
+    for (const [k,v] of Object.entries(filters)) if (v) form.append(k, v);
     endpoint = `${API}/api/edu/search/text`;
   } else {
     const file = document.getElementById('img-query-input').files[0];
@@ -423,19 +464,16 @@ async function runSearch() {
     lastQuery = `[imagen: ${file.name}]`;
     form.append('file', file);
     form.append('limit', 5);
-    if (filters.area)  form.append('area',  filters.area);
-    if (filters.nivel) form.append('nivel', filters.nivel);
-    if (filters.tipo)  form.append('tipo',  filters.tipo);
-    if (filters.grado) form.append('grado', filters.grado);
+    for (const [k,v] of Object.entries(filters)) if (v) form.append(k, v);
     endpoint = `${API}/api/edu/search/image`;
   }
 
   setSearchLoading(true);
   showResultsLoading();
   try {
-    const r = await fetch(endpoint, { method:'POST', body:form });
+    const r = await fetch(endpoint, {method:'POST', body:form});
     const d = await r.json();
-    if (!r.ok) throw new Error(d.detail ?? 'Error');
+    if (!r.ok) throw new Error(d.detail ?? 'Error en la búsqueda');
     renderResults(d);
   } catch(err) {
     document.getElementById('search-results').innerHTML =
@@ -443,12 +481,17 @@ async function runSearch() {
   } finally { setSearchLoading(false); }
 }
 
-// ── Busqueda por similitud (desde modal) ──────────────────────────────────────
+// ── Busqueda similar ──────────────────────────────────────────────────────────
+// FIX: se captura el b64 ANTES de cerrar modal para evitar null reference
 async function searchSimilarFromModal() {
-  if (!modalHit?.image_base64) return;
-  const b64 = modalHit.image_base64;
-  closeModal();
-  showPanelSearch();
+  const b64 = modalHit?.image_base64;        // captura inmediata
+  const refTxt = modalHit
+    ? `pág. ${modalHit.page_number ?? '?'} de "${modalHit.titulo || modalHit.source_file || ''}"`
+    : '';
+  if (!b64) { alert('Esta página no tiene imagen disponible.'); return; }
+
+  closeModal();   // ahora si cerramos (modalHit se limpia aqui)
+  goToSearch();
   setSearchLoading(true);
   showResultsLoading();
 
@@ -456,10 +499,33 @@ async function searchSimilarFromModal() {
     const form = new FormData();
     form.append('image_base64', b64);
     form.append('limit', 5);
-    const r = await fetch(`${API}/api/edu/search/similar`, { method:'POST', body:form });
+    const r = await fetch(`${API}/api/edu/search/similar`, {method:'POST', body:form});
     const d = await r.json();
     if (!r.ok) throw new Error(d.detail ?? 'Error');
-    renderResults(d, `Páginas similares a pág. ${modalHit.page_number} de ${modalHit.source_file}`);
+    renderResults(d, `Páginas similares a ${refTxt}`);
+  } catch(err) {
+    document.getElementById('search-results').innerHTML =
+      `<div class="empty-state"><div class="icon">⚠️</div><div>${escHtml(err.message)}</div></div>`;
+  } finally { setSearchLoading(false); }
+}
+
+async function searchSimilarDirect(idx) {
+  const hit = (window._lastHits ?? [])[idx];
+  if (!hit?.image_base64) { alert('Sin imagen disponible.'); return; }
+  // Asignar y luego llamar — no cierra modal porque no esta abierto
+  const b64    = hit.image_base64;
+  const refTxt = `pág. ${hit.page_number ?? '?'} de "${hit.titulo || hit.source_file || ''}"`;
+  goToSearch();
+  setSearchLoading(true);
+  showResultsLoading();
+  try {
+    const form = new FormData();
+    form.append('image_base64', b64);
+    form.append('limit', 5);
+    const r = await fetch(`${API}/api/edu/search/similar`, {method:'POST', body:form});
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail ?? 'Error');
+    renderResults(d, `Páginas similares a ${refTxt}`);
   } catch(err) {
     document.getElementById('search-results').innerHTML =
       `<div class="empty-state"><div class="icon">⚠️</div><div>${escHtml(err.message)}</div></div>`;
@@ -468,32 +534,32 @@ async function searchSimilarFromModal() {
 
 function setSearchLoading(on) {
   document.getElementById('btn-search').disabled = on;
-  document.getElementById('btn-search-inner').innerHTML = on
-    ? `<span class="spinner"></span>` : 'Buscar';
+  document.getElementById('btn-search-inner').innerHTML = on ? `<span class="spinner"></span>` : 'Buscar';
 }
 
 // ── Render resultados ─────────────────────────────────────────────────────────
 function renderResults(data, customTitle=null) {
   const section = document.getElementById('search-results');
   const hits = data.results ?? [];
-
   if (!hits.length) {
     section.innerHTML=`<div class="empty-state"><div class="icon">😕</div><div>No se encontraron recursos.<br><small>Prueba con otras palabras o ajusta los filtros.</small></div></div>`;
     return;
   }
+  window._lastHits = hits;
 
-  const filters = data.filters_applied ?? {};
-  const filterTags = Object.entries(filters).map(([k,v])=>`<span class="filter-tag">${k}: ${v}</span>`).join('');
+  const ftags = Object.entries(data.filters_applied??{})
+    .filter(([,v])=>v).map(([k,v])=>`<span class="filter-tag">${k}: ${escHtml(v)}</span>`).join('');
   const title = customTitle ?? `${hits.length} resultado${hits.length>1?'s':''} encontrado${hits.length>1?'s':''}`;
 
   const cards = hits.map((h,i) => {
+    const src  = h.image_base64 ? `data:image/jpeg;base64,${h.image_base64}` : '';
     const tags = [
-      h.area  ? `<span class="tag area">${escHtml(h.area)}</span>`   : '',
-      h.nivel ? `<span class="tag nivel">${escHtml(h.nivel)}</span>` : '',
-      h.tipo  ? `<span class="tag tipo">${escHtml(h.tipo)}</span>`   : '',
-      h.grado ? `<span class="tag grado">${escHtml(h.grado)}</span>` : '',
+      h.tipo_recurso ? `<span class="tag tipo">${escHtml(h.tipo_recurso)}</span>` : '',
+      h.nivel        ? `<span class="tag nivel">${escHtml(h.nivel)}</span>`        : '',
+      h.area         ? `<span class="tag area">${escHtml(h.area)}</span>`          : '',
+      h.categoria    ? `<span class="tag cat">${escHtml(h.categoria)}</span>`      : '',
     ].join('');
-    const src = h.image_base64 ? `data:image/png;base64,${h.image_base64}` : '';
+    const displayTitle = h.titulo || h.source_file || 'Recurso';
     return `
       <div class="result-card">
         <div class="result-img-wrap" onclick="openModal(${i})" title="Ver página completa">
@@ -501,11 +567,11 @@ function renderResults(data, customTitle=null) {
           <div class="rank-badge">#${i+1}</div>
         </div>
         <div class="result-body">
-          <div class="result-title" title="${escHtml(h.source_file??'')}">📄 ${escHtml(h.source_file??'Recurso')}</div>
+          <div class="result-title" title="${escHtml(displayTitle)}">📄 ${escHtml(displayTitle)}</div>
           <div class="result-page">Página ${h.page_number??'—'} de ${h.total_pages??'—'}</div>
           ${tags ? `<div class="result-tags">${tags}</div>` : ''}
           <div class="result-actions">
-            <button class="btn-action" onclick="openModal(${i})">🔍 Ver página completa</button>
+            <button class="btn-action" onclick="openModal(${i})">🔍 Ver página</button>
             <button class="btn-action" onclick="searchSimilarDirect(${i})">🔁 Similares</button>
           </div>
         </div>
@@ -515,19 +581,9 @@ function renderResults(data, customTitle=null) {
   section.innerHTML = `
     <div class="results-header">
       <div class="results-count">${title}</div>
-      <div class="active-filters">${filterTags}</div>
+      <div class="active-filters">${ftags}</div>
     </div>
     <div class="results-grid">${cards}</div>`;
-
-  window._lastHits = hits;
-}
-
-// Buscar similares directo desde la card (sin abrir modal)
-async function searchSimilarDirect(idx) {
-  const hit = (window._lastHits??[])[idx];
-  if (!hit?.image_base64) return;
-  modalHit = hit;
-  await searchSimilarFromModal();
 }
 
 function showResultsLoading() {
@@ -538,30 +594,65 @@ function showResultsLoading() {
     </div>`;
 }
 
-// ── Modal ─────────────────────────────────────────────────────────────────────
+// ── Modal visor ───────────────────────────────────────────────────────────────
 function openModal(idx) {
   const hit = (window._lastHits??[])[idx];
   if (!hit) return;
-  modalHit = hit;
+  modalHit = {...hit};  // copia para evitar mutacion
 
-  document.getElementById('modal-title').textContent =
-    `${hit.source_file??'Recurso'} — Página ${hit.page_number??'?'}`;
-
+  const displayTitle = hit.titulo || hit.source_file || 'Recurso';
+  document.getElementById('modal-title').textContent = displayTitle;
   document.getElementById('modal-tags').innerHTML = [
-    hit.area  ? `<span class="tag area">${escHtml(hit.area)}</span>`   : '',
-    hit.nivel ? `<span class="tag nivel">${escHtml(hit.nivel)}</span>` : '',
-    hit.tipo  ? `<span class="tag tipo">${escHtml(hit.tipo)}</span>`   : '',
-    hit.grado ? `<span class="tag grado">${escHtml(hit.grado)}</span>` : '',
+    hit.tipo_recurso ? `<span class="tag tipo">${escHtml(hit.tipo_recurso)}</span>` : '',
+    hit.nivel        ? `<span class="tag nivel">${escHtml(hit.nivel)}</span>`        : '',
+    hit.area         ? `<span class="tag area">${escHtml(hit.area)}</span>`          : '',
+    hit.categoria    ? `<span class="tag cat">${escHtml(hit.categoria)}</span>`      : '',
   ].join('');
 
-  const img = document.getElementById('modal-img');
-  img.src = hit.image_base64 ? `data:image/png;base64,${hit.image_base64}` : '';
+  // Imagen — soporta JPEG (nuevo) y PNG (legacy)
+  const mimeType = hit.image_base64?.startsWith('/9j') ? 'jpeg' : 'png';
+  document.getElementById('modal-img').src =
+    hit.image_base64 ? `data:image/${mimeType};base64,${hit.image_base64}` : '';
 
-  // Referencia sin score
   document.getElementById('modal-ref').textContent =
     `📄 ${hit.source_file??''} · Página ${hit.page_number??'?'} de ${hit.total_pages??'?'}`;
 
+  // Detalle
+  const detailFields = [
+    {label:'Autor',             val: hit.autor},
+    {label:'Año edición',       val: hit.anio_edicion},
+    {label:'Modalidad',         val: hit.modalidad},
+    {label:'Servicio educativo',val: hit.servicio_educativo},
+    {label:'Lengua/Idioma',     val: hit.lengua_idioma},
+    {label:'Sub-categoría',     val: hit.sub_categoria},
+    {label:'Derecho/Autoridad', val: hit.derecho_autoridad},
+    {label:'Archivo',           val: hit.source_file},
+  ].filter(f=>f.val);
+
+  document.getElementById('detail-grid').innerHTML = detailFields.map(f=>`
+    <div class="detail-field">
+      <div class="df-label">${escHtml(f.label)}</div>
+      <div class="df-value">${escHtml(f.val)}</div>
+    </div>`).join('');
+
+  const resWrap = document.getElementById('detail-resumen');
+  resWrap.style.display = hit.resumen ? 'block' : 'none';
+  if (hit.resumen) document.getElementById('detail-resumen-text').textContent = hit.resumen;
+
+  const compWrap = document.getElementById('detail-competencias-wrap');
+  compWrap.style.display = hit.competencias ? 'block' : 'none';
+  if (hit.competencias) document.getElementById('detail-competencias-text').textContent = hit.competencias;
+
+  document.getElementById('modal-detail').classList.remove('open');
+  document.querySelector('.btn-detail-toggle').textContent = '📋 Ver detalle';
   document.getElementById('modal-overlay').classList.add('open');
+}
+
+function toggleDetail() {
+  const d   = document.getElementById('modal-detail');
+  const btn = document.querySelector('.btn-detail-toggle');
+  const open = d.classList.toggle('open');
+  btn.textContent = open ? '📋 Ocultar detalle' : '📋 Ver detalle';
 }
 
 function closeModal() {
@@ -569,156 +660,227 @@ function closeModal() {
   modalHit = null;
 }
 function closeModalOutside(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
+  if (e.target===document.getElementById('modal-overlay')) closeModal();
 }
 
-// ── Repositorio ───────────────────────────────────────────────────────────────
-async function loadRepoStats() {
-  try {
-    const r = await fetch(`${API}/api/edu/resources`);
-    const list = await r.json();
-    const indexed = list.filter(x=>x.indexed).length;
-    document.getElementById('s-total').textContent   = list.length;
-    document.getElementById('s-indexed').textContent = indexed;
-    document.getElementById('s-pending').textContent = list.length - indexed;
-  } catch {}
+// ── Modal subida manual ───────────────────────────────────────────────────────
+function openUploadModal()  { document.getElementById('modal-upload').classList.add('open'); }
+function closeUploadModal() {
+  document.getElementById('modal-upload').classList.remove('open');
+  document.getElementById('upload-alert').style.display='none';
+}
+function closeUploadOutside(e) {
+  if (e.target===document.getElementById('modal-upload')) closeUploadModal();
 }
 
-async function loadResourceTable() {
-  const wrap = document.getElementById('resource-table-wrap');
-  wrap.innerHTML=`<div class="empty-state"><span class="spinner dark"></span></div>`;
-  try {
-    const r = await fetch(`${API}/api/edu/resources`);
-    const list = await r.json();
-    if (!list.length) {
-      wrap.innerHTML=`<div class="empty-state"><div class="icon">📭</div><div>Sin recursos. Escanea la carpeta o sube un PDF.</div></div>`;
-      return;
-    }
-    const rows = list.map(res=>`
-      <tr>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(res.filename)}">${escHtml(res.filename)}</td>
-        <td>${res.pages||'—'}</td>
-        <td>${res.area||'—'}</td>
-        <td>${res.nivel||'—'}</td>
-        <td>${res.tipo||'—'}</td>
-        <td>${res.grado||'—'}</td>
-        <td><span class="${res.indexed?'badge-indexed':'badge-pending'}">${res.indexed?'✓ Indexado':'Pendiente'}</span></td>
-      </tr>`).join('');
-    wrap.innerHTML=`
-      <table class="resource-table">
-        <thead><tr><th>Archivo</th><th>Págs.</th><th>Área</th><th>Nivel</th><th>Tipo</th><th>Grado</th><th>Estado</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>`;
-  } catch(e) { wrap.innerHTML=`<div class="alert error">Error: ${escHtml(e.message)}</div>`; }
-}
+async function submitManual() {
+  const fileInput = document.getElementById('manual-file');
+  const file = fileInput.files[0];
+  if (!file) return showUploadAlert('Selecciona un archivo PDF.','error');
+  const titulo = document.getElementById('m-titulo').value.trim();
+  if (!titulo) return showUploadAlert('El título es obligatorio para verificar duplicados.','error');
 
-async function scanRepo() {
-  showRepoAlert('Escaneando carpeta…','info');
-  try {
-    const r = await fetch(`${API}/api/edu/repository/scan`,{method:'POST'});
-    const d = await r.json();
-    let msg = `✅ Escaneo completado: ${d.total} recursos (${d.new_found} nuevos, ${d.pending} pendientes)`;
-    if (d.removed>0) msg += `, ${d.removed} eliminados del índice por no encontrarse en disco`;
-    showRepoAlert(msg,'success');
-    loadRepoStats(); loadResourceTable(); loadFilters();
-  } catch(e) { showRepoAlert(`❌ ${e.message}`,'error'); }
-}
+  const btn = document.getElementById('btn-upload-manual');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Indexando…';
 
-async function indexRepo() {
-  document.getElementById('btn-index').disabled=true;
-  document.getElementById('repo-progress').style.display='block';
-  document.getElementById('repo-progress-label').textContent='Indexando PDFs… esto puede tardar varios minutos.';
-  showRepoAlert('','');
-  try {
-    const r = await fetch(`${API}/api/edu/repository/index`,{method:'POST'});
-    const d = await r.json();
-    document.getElementById('repo-progress').style.display='none';
-    const errMsg = d.errors.length ? ` Errores: ${d.errors.map(e=>e.file).join(', ')}` : '';
-    showRepoAlert(`✅ ${d.processed} archivos indexados, ${d.pages_total} páginas.${errMsg}`,
-      d.errors.length?'error':'success');
-    loadRepoStats(); loadResourceTable(); loadFilters();
-  } catch(e) {
-    document.getElementById('repo-progress').style.display='none';
-    showRepoAlert(`❌ ${e.message}`,'error');
-  } finally { document.getElementById('btn-index').disabled=false; }
-}
+  // Mostrar botón cancelar en el panel repositorio también
+  setGlobalCancelVisible(true);
 
-async function uploadPDF(input) {
-  const file = input.files[0];
-  if (!file) return;
-  showRepoAlert(`Subiendo: ${file.name}…`,'info');
   const form = new FormData();
-  form.append('file', file);
+  form.append('file',               file);
+  form.append('titulo',             titulo);
+  form.append('tipo_recurso',       document.getElementById('m-tipo').value);
+  form.append('categoria',          document.getElementById('m-cat').value);
+  form.append('sub_categoria',      document.getElementById('m-subcat').value);
+  form.append('nivel',              document.getElementById('m-nivel').value);
+  form.append('area',               document.getElementById('m-area').value);
+  form.append('modalidad',          document.getElementById('m-modalidad').value);
+  form.append('servicio_educativo', document.getElementById('m-servicio').value);
+  form.append('autor',              document.getElementById('m-autor').value);
+  form.append('derecho_autoridad',  document.getElementById('m-derecho').value);
+  form.append('anio_edicion',       document.getElementById('m-anio').value);
+  form.append('lengua_idioma',      document.getElementById('m-lengua').value);
+  form.append('resumen',            document.getElementById('m-resumen').value);
+  form.append('competencias',       document.getElementById('m-competencias').value);
+
   try {
-    const r = await fetch(`${API}/api/edu/repository/upload`,{method:'POST',body:form});
+    const r = await fetch(`${API}/api/edu/repository/upload`, {method:'POST', body:form});
     const d = await r.json();
-    if (!r.ok) throw new Error(d.detail??'Error');
-    showRepoAlert(`✅ ${file.name}: ${d.pages_indexed} páginas indexadas.`,'success');
-    loadRepoStats(); loadResourceTable(); loadFilters();
-  } catch(e) { showRepoAlert(`❌ ${e.message}`,'error'); }
-  input.value='';
+    if (r.status === 499) {  // cancelado
+      showUploadAlert('⏹ Indexación cancelada por el usuario.', 'warning');
+    } else if (r.status === 409) {  // duplicado
+      showUploadAlert(d.detail ?? 'Recurso ya existe.', 'warning');
+    } else if (!r.ok) {
+      throw new Error(d.detail ?? 'Error');
+    } else {
+      showUploadAlert(`✅ ${file.name}: ${d.pages_indexed} páginas indexadas.`, 'success');
+      loadFilters();
+      setTimeout(closeUploadModal, 2000);
+    }
+  } catch(e) { showUploadAlert(`❌ ${e.message}`, 'error'); }
+  finally {
+    btn.disabled=false; btn.textContent='⚡ Indexar';
+    setGlobalCancelVisible(false);
+  }
 }
 
+function showUploadAlert(msg, type) {
+  const el = document.getElementById('upload-alert');
+  el.textContent=msg; el.className=`alert ${type}`; el.style.display='block';
+}
+
+// ── Excel MINEDU con SSE y cancelacion ───────────────────────────────────────
 async function uploadExcel(input) {
   const file = input.files[0];
   if (!file) return;
-  showRepoAlert(`Cargando metadata desde: ${file.name}…`,'info');
+  input.value='';
+
+  processing = true;
+  setGlobalCancelVisible(true);
+  showRepoAlert(`Procesando: ${file.name}…`, 'info');
+
+  const log   = document.getElementById('progress-log');
+  const wrap  = document.getElementById('progress-wrap');
+  const fill  = document.getElementById('progress-fill');
+  const pct   = document.getElementById('progress-pct');
+  const label = document.getElementById('progress-label');
+
+  log.innerHTML=''; log.style.display='block';
+  wrap.style.display='block'; fill.style.width='0%'; pct.textContent='0%';
+
   const form = new FormData();
   form.append('file', file);
+  form.append('max_concurrent', '4');
+
   try {
-    const r = await fetch(`${API}/api/edu/repository/excel`,{method:'POST',body:form});
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.detail??'Error');
-    let msg = `✅ Metadata aplicada: ${d.updated} recursos actualizados de ${d.total_excel_entries} entradas en el Excel.`;
-    if (d.not_found_in_index.length)
-      msg += ` No encontrados en índice: ${d.not_found_in_index.slice(0,3).join(', ')}${d.not_found_in_index.length>3?'…':''}`;
-    showRepoAlert(msg,'success');
-    loadResourceTable(); loadFilters();
-  } catch(e) { showRepoAlert(`❌ ${e.message}`,'error'); }
-  input.value='';
+    const r = await fetch(`${API}/api/edu/repository/excel/stream`, {method:'POST', body:form});
+    if (!r.ok) { const e=await r.json(); throw new Error(e.detail??'Error'); }
+
+    const reader = r.body.getReader();
+    const dec    = new TextDecoder();
+    let buf='', total=0, done_count=0;
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream:true});
+      const parts = buf.split('\n\n');
+      buf = parts.pop() ?? '';
+
+      for (const part of parts) {
+        const line = part.trim();
+        if (!line.startsWith('data:')) continue;
+        try {
+          const ev = JSON.parse(line.slice(5).trim());
+          if (ev.type==='start') {
+            total=ev.total;
+            addLog(`🔵 ${ev.msg}`, 'log-info');
+            label.textContent=`0 / ${total} recursos`;
+          } else if (ev.type==='ok') {
+            done_count++;
+            addLog(ev.msg, 'log-ok');
+            updateProgress(done_count, total, label, fill, pct);
+          } else if (ev.type==='skipped') {
+            done_count++;
+            addLog(ev.msg, 'log-skip');
+            updateProgress(done_count, total, label, fill, pct);
+          } else if (ev.type==='error') {
+            done_count++;
+            addLog(ev.msg, 'log-err');
+            updateProgress(done_count, total, label, fill, pct);
+          } else if (ev.type==='cancelled') {
+            addLog(ev.msg, 'log-err');
+          } else if (ev.type==='done') {
+            addLog(`\n🎉 ${ev.msg}`, 'log-info');
+            fill.style.width='100%'; pct.textContent='100%';
+            showRepoAlert(`✅ ${ev.msg}`, ev.failed>0?'error':'success');
+            loadFilters();
+          }
+        } catch {}
+      }
+    }
+  } catch(err) {
+    showRepoAlert(`❌ ${err.message}`, 'error');
+    addLog(`ERROR: ${err.message}`, 'log-err');
+  } finally {
+    processing=false;
+    setGlobalCancelVisible(false);
+  }
+}
+
+async function cancelProcessing() {
+  try {
+    await fetch(`${API}/api/edu/repository/cancel`, {method:'POST'});
+    // Mostrar en ambos contextos (repo y modal manual)
+    showRepoAlert('⏹ Cancelando… la operación se detendrá en el próximo punto de control.', 'warning');
+    showUploadAlertSafe('⏹ Cancelando indexación…', 'warning');
+    document.getElementById('btn-cancel').disabled=true;
+    setTimeout(() => {
+      document.getElementById('btn-cancel').disabled=false;
+      setGlobalCancelVisible(false);
+    }, 5000);
+  } catch(e) { showRepoAlert(`❌ ${e.message}`, 'error'); }
+}
+
+function setGlobalCancelVisible(visible) {
+  const btn = document.getElementById('btn-cancel');
+  btn.style.display = visible ? 'inline-flex' : 'none';
+  btn.disabled = false;
+}
+
+function showUploadAlertSafe(msg, type) {
+  const el = document.getElementById('upload-alert');
+  if (el) { el.textContent=msg; el.className=`alert ${type}`; el.style.display='block'; }
+}
+
+function addLog(msg, cls) {
+  const log = document.getElementById('progress-log');
+  const div = document.createElement('div');
+  div.className=cls; div.textContent=msg;
+  log.appendChild(div); log.scrollTop=log.scrollHeight;
+}
+function updateProgress(done, total, label, fill, pct) {
+  const p = total>0 ? Math.round((done/total)*100) : 0;
+  fill.style.width=p+'%'; pct.textContent=p+'%';
+  label.textContent=`${done} / ${total} recursos procesados`;
 }
 
 function showRepoAlert(msg, type) {
   const el = document.getElementById('repo-alert');
-  if (!msg) { el.style.display='none'; return; }
   el.textContent=msg; el.className=`alert ${type}`; el.style.display='block';
 }
 
 // ── Historial ─────────────────────────────────────────────────────────────────
 function addToHistory(q) {
-  let h = JSON.parse(localStorage.getItem(HISTORY_KEY)??'[]');
-  h = [q,...h.filter(x=>x!==q)].slice(0,10);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
+  let h=JSON.parse(localStorage.getItem(HISTORY_KEY)??'[]');
+  h=[q,...h.filter(x=>x!==q)].slice(0,10);
+  localStorage.setItem(HISTORY_KEY,JSON.stringify(h));
   renderHistory();
 }
 function renderHistory() {
-  const list = document.getElementById('history-list');
-  const h = JSON.parse(localStorage.getItem(HISTORY_KEY)??'[]');
+  const list=document.getElementById('history-list');
+  const h=JSON.parse(localStorage.getItem(HISTORY_KEY)??'[]');
   if (!h.length) { list.innerHTML=`<div style="font-size:12px;color:var(--muted)">Sin búsquedas aún</div>`; return; }
-  list.innerHTML = h.map((q,i)=>`
+  list.innerHTML=h.map((q,i)=>`
     <div class="history-item" onclick="repeatSearch(${i})">
-      <span style="color:var(--muted);font-size:12px">↩</span>
+      <span style="font-size:12px;color:var(--muted)">↩</span>
       <span class="hist-text">${escHtml(q)}</span>
       <button class="hist-del" onclick="deleteHistory(event,${i})">✕</button>
     </div>`).join('');
 }
 function repeatSearch(idx) {
-  const h = JSON.parse(localStorage.getItem(HISTORY_KEY)??'[]');
-  const q = h[idx]; if (!q) return;
+  const h=JSON.parse(localStorage.getItem(HISTORY_KEY)??'[]');
+  const q=h[idx]; if (!q) return;
   setSearchMode('text');
-  document.getElementById('main-query').value = q;
-  showPanelSearch();
-  runSearch();
+  document.getElementById('main-query').value=q;
+  goToSearch(); runSearch();
 }
 function deleteHistory(e,idx) {
   e.stopPropagation();
-  let h = JSON.parse(localStorage.getItem(HISTORY_KEY)??'[]');
-  h.splice(idx,1);
-  localStorage.setItem(HISTORY_KEY,JSON.stringify(h));
-  renderHistory();
+  let h=JSON.parse(localStorage.getItem(HISTORY_KEY)??'[]');
+  h.splice(idx,1); localStorage.setItem(HISTORY_KEY,JSON.stringify(h)); renderHistory();
 }
 
-// ── Utils ─────────────────────────────────────────────────────────────────────
 function escHtml(s) {
   return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
