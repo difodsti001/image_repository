@@ -1,25 +1,38 @@
-# Motor de vectorización ColPali
+# =========================
+# Repositorio de imágenes
+# =========================
 
-# ColPali y dependencias del modelo
+# ColPali / NLP
 colpali-engine>=0.3.7
 transformers==4.47.0
 peft==0.14.0
-torch>=2.0.0
 
-# Qdrant
+# PyTorch (NO fijamos GPU aquí, se instala aparte)
+torch>=2.3.0
+
+# Qdrant vector DB
 qdrant-client>=1.9.0
 
-# Conversión PDF
+# PDF -> imágenes
 pdf2image>=1.17.0
-PyMuPDF>=1.24.0    
+PyMuPDF>=1.24.0
 Pillow>=10.0.0
 
 # API
 fastapi>=0.111.0
 uvicorn[standard]>=0.29.0
 python-multipart>=0.0.9
-google-generativeai
 
 # Utilidades
 stamina>=24.0.0
 numpy>=1.26.0
+
+# Configuración / entorno
+python-dotenv>=1.0.1
+certifi>=2024.2.2
+
+# Async HTTP (Excel downloader)
+aiohttp>=3.9.5
+
+# Excel parsing
+openpyxl>=3.1.2

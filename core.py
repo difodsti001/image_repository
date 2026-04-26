@@ -56,7 +56,7 @@ BATCH_SIZE             = int(os.getenv("BATCH_SIZE",         "4"))
 QDRANT_URL             = os.getenv("QDRANT_URL",             "http://91.99.108.245:6333")
 QDRANT_API_KEY         = os.getenv("QDRANT_API_KEY",         "")
 SEARCH_LIMIT           = int(os.getenv("SEARCH_LIMIT",       "5"))
-POPPLER_PATH           = os.getenv("POPPLER_PATH",           r"C:\Users\Lenovo\AppData\Local\Microsoft\WinGet\Packages\oschwartz10612.Poppler_Microsoft.Winget.Source_8wekyb3d8bbwe\poppler-25.07.0\Library\bin")
+POPPLER_PATH           = os.getenv("POPPLER_PATH",           r"C:\poppler-25.12.0\Library\bin")
 
 # Configuracion educativa
 EDU_COLLECTION   = os.getenv("EDU_COLLECTION",    "imagenes_embeddings")
@@ -117,15 +117,27 @@ _active_task:  asyncio.Task | None = None         # tarea en curso (Excel o manu
 # ---------------------------------------------------------------------------
 
 def _detect_device() -> str:
+    import sys
+
+    logger.info("Python ejecutándose en: %s", sys.executable)
+    logger.info("torch version: %s", torch.__version__)
+    logger.info("torch.cuda.is_available(): %s", torch.cuda.is_available())
+    logger.info("torch.cuda.device_count(): %s", torch.cuda.device_count())
+
     env = os.getenv("DEVICE_MAP", "").strip()
+    logger.info("DEVICE_MAP env: %s", env)
+
     if env:
         return env
+
     if torch.cuda.is_available():
-        logger.info("GPU detectada: %s -> cuda:0", torch.cuda.get_device_name(0))
-        return "cuda:0"
+        logger.info("GPU detectada: %s", torch.cuda.get_device_name(0))
+        return "cuda"
+
     if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
         logger.info("Apple Silicon -> mps")
         return "mps"
+
     logger.info("Sin GPU -> cpu")
     return "cpu"
 
@@ -137,8 +149,8 @@ def get_model() -> tuple[ColPali, ColPaliProcessor]:
     device = _detect_device()
     logger.info("Cargando ColPali '%s' (device=%s)...", COLPALI_MODEL_NAME, device)
     _colpali_model = ColPali.from_pretrained(
-        COLPALI_MODEL_NAME, torch_dtype=torch.bfloat16,
-        device_map=device, trust_remote_code=True,
+        COLPALI_MODEL_NAME, torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+        device_map="auto" if torch.cuda.is_available() else "cpu", trust_remote_code=True,
     )
     logger.info("Cargando processor '%s'...", COLPALI_PROCESSOR_NAME)
     _colpali_processor = ColPaliProcessor.from_pretrained(COLPALI_PROCESSOR_NAME)

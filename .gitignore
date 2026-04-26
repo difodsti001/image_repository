@@ -5,3 +5,6 @@
 # Ignorar carpetas
 venv/
 __pycache__/
+
+# Ignorar archivos
+Catálogo_Banco_Recurso.xlsx
